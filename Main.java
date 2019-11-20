@@ -1,11 +1,41 @@
 import java.util.Arrays;
-
 public class Main{
     public static void main (String [] args) throws ArrayIndexOutOfBoundsException, Exception{
-        Clock clock=new Clock();
-        clock.startTime();
-       // clock.printTime();
+        boolean [] MBR=new boolean[]{false, false, true, false, true, true, false, false};
+        boolean [] Z=new boolean[]{true};
+        boolean [] N=new boolean[]{false};
+        boolean [] JAM= new boolean[]{true, true, true};
+        boolean [] Address= new boolean[]{false,false, false, false, true, false, false, true, true};
+        boolean [] MPC= new boolean[]{false, false, false, false, false, false, false, false, false};
+        ControlLine mbr_cl=new ControlLine(MBR);
+        ControlLine Z_cl= new ControlLine(Z);
+        ControlLine N_cl= new ControlLine(N);
+        ControlLine jam_cl= new ControlLine(JAM);
+        ControlLine mpc_cl= new ControlLine(MPC);
+        ControlLine addr_cl= new ControlLine(Address);
+        HighBit hb= new HighBit(N_cl, Z_cl, jam_cl, mpc_cl);
+        System.out.println("High bit:"+hb.highBit_cl().getValue()[0]);
+        O o= new O(addr_cl, mbr_cl, jam_cl, mpc_cl);
+        int i=0;
+        System.out.print("Address in O{ ");
+        while (i<8) {
+            System.out.print( o.getO()[i]+" ");
+            i++;
+        }
+        System.out.print( "}\n");
 
+        ControlLine o_cl= new ControlLine(o.getO());
+        ControlLine highBit_cl= new ControlLine();
+        highBit_cl=hb.highBit_cl();
+        MPC add= new MPC(o_cl, highBit_cl);
+        //add.setMPC();
+        add.getMPCInt();
+        System.out.print("Address in MPC: {");
+        for (int j=0; j<9; j++) {
+            System.out.print(add.GetMPC().getValue()[j]+" ");
+        }
+        System.out.println("}");
+        /*
         int time=0;
         boolean stop=false;
         boolean [] test=new boolean[]{false,false,true,true};
@@ -19,23 +49,7 @@ public class Main{
            //System.out.println(time);
             Thread.sleep(1000);
         }
-     /*boolean control [] = new boolean[] {false, false, true, true, true, true, true, true};
-     int A=8;
-     int B=4;
-     ALU alu=new ALU(A,B);
-     alu.setControl(control);
-     int result=alu.function();
-     boolean a[]= new boolean[]{false,true,false,true};
-        int n = 0, l = a.length;
-        for (int i = 0; i < l; i++) {
-            n = (n << 1) + (a[i] ? 1 : 0);
-        }
-        long start = System.nanoTime();
-
-        long finish = System.nanoTime();
-        long timeElapsed = finish - start;
-
-     System.out.println(timeElapsed);*/
+    */
     }
     private boolean [] intToBits(int input){
         boolean[] bits = new boolean[32];
@@ -48,7 +62,6 @@ public class Main{
             j=bit8.length-1-i;
             bit8[i]=bits[j];
         }
-        //System.out.println(input + " = " + Arrays.toString(bit8));
         return bit8;
     }
 }
